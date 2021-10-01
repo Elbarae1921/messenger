@@ -1,0 +1,61 @@
+name: messenger
+description: messenger.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.13.3
+  provider: ^5.0.0-nullsafety.5
+  json_annotation: ^4.0.1
+  intl: ^0.17.0
+  shared_preferences: ^2.0.6
+  cupertino_icons: ^1.0.2
+  mask_text_input_formatter: ^2.0.0
+  package_info_plus: ^1.0.3
+  platform_device_id: ^1.0.1
+  crypto: ^3.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.0.4
+  json_serializable: ^4.1.3
+  flutter_launcher_icons: "^0.9.0"
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/images/launcher_icon/background.png"
+  image_path_android: "assets/images/launcher_icon/background.png"
+  adaptive_icon_background: "assets/images/launcher_icon/background.png"
+  adaptive_icon_foreground: "assets/images/launcher_icon/foreground.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/background.jpg
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+
+    - family: RobotoMono
+      fonts:
+        - asset: assets/fonts/RobotoMono-Regular.ttf
+        - asset: assets/fonts/RobotoMono-Italic.ttf
+          style: italic
+        - asset: assets/fonts/RobotoMono-Bold.ttf
+          weight: 700
