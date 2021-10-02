@@ -1,5 +1,5 @@
 name: messenger
-description: messenger.
+description: Messenger.
 
 publish_to: "none"
 
@@ -41,7 +41,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/background.jpg
+    - assets/images/default.png
 
   fonts:
     - family: Poppins
@@ -59,3 +59,24 @@ flutter:
           style: italic
         - asset: assets/fonts/RobotoMono-Bold.ttf
           weight: 700
+
+    - family: Ubuntu
+      fonts:
+        - asset: assets/fonts/Ubuntu-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Ubuntu-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: assets/fonts/Ubuntu-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Ubuntu-Light.ttf
+          weight: 200
+        - asset: assets/fonts/Ubuntu-LightItalic.ttf
+          style: italic
+          weight: 200
+        - asset: assets/fonts/Ubuntu-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Ubuntu-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: assets/fonts/Ubuntu-Regular.ttf

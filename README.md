@@ -1,6 +1,6 @@
 # messenger
 
-messenger.
+Messenger.
 
 ### build_runner
 
@@ -13,3 +13,5 @@ flutter pub run build_runner watch --delete-conflicting-outputs
 ```bash
 flutter pub run flutter_launcher_icons:main
 ```
+
+[graphql](https://pub.dev/packages/graphql)
