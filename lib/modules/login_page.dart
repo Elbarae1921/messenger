@@ -41,6 +41,8 @@ class _LoginPageState extends State<LoginPage> {
 
       await Prefs.setToken(loginOutput.jwt);
 
+      await Prefs.setAutoEmail(_emailController.text);
+
       Provider.of<UserProvider>(context, listen: false).user = loginOutput.user;
 
       Navigator.of(context).pushReplacementNamed(HomePage.route);
@@ -79,12 +81,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero, () async {
+      final email = await Prefs.getAutoEmail();
+
+      if (email != null) _emailController.text = email;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Messenger')),
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Container(
           color: Colors.transparent,

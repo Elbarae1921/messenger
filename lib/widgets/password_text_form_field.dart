@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PasswordTextFormField extends StatelessWidget {
+class PasswordTextFormField extends StatefulWidget {
   const PasswordTextFormField({
     Key? key,
     required this.focusNode,
@@ -11,14 +11,32 @@ class PasswordTextFormField extends StatelessWidget {
   final TextEditingController textEditingController;
 
   @override
+  _PasswordTextFormFieldState createState() => _PasswordTextFormFieldState();
+}
+
+class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
+  bool _visible = false;
+
+  void _toggleVisible() {
+    setState(() {
+      _visible = !_visible;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: true,
-      focusNode: focusNode,
-      controller: textEditingController,
-      decoration: const InputDecoration(
+      obscureText: !_visible,
+      focusNode: widget.focusNode,
+      controller: widget.textEditingController,
+      keyboardType: _visible ? TextInputType.visiblePassword : null,
+      decoration: InputDecoration(
         labelText: 'Password',
         icon: const Icon(Icons.lock),
+        suffixIcon: IconButton(
+          onPressed: _toggleVisible,
+          icon: Icon(_visible ? Icons.visibility_off : Icons.visibility),
+        ),
       ),
       validator: (value) {
         if ((value ?? '').length < 4) return 'Invalid password';

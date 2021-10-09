@@ -14,4 +14,15 @@ class Prefs {
     else
       await (await prefs).setString('token', token);
   }
+
+  static Future<String?> getAutoEmail() async {
+    return (await prefs).getString('auto_email');
+  }
+
+  static Future<void> setAutoEmail(String? autoEmail) async {
+    if (autoEmail == null)
+      await (await prefs).remove('auto_email');
+    else
+      await (await prefs).setString('auto_email', autoEmail);
+  }
 }

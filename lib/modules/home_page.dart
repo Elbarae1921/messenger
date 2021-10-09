@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:messenger/constants/extended_colors.dart';
 import 'package:messenger/modules/splash_page.dart';
 import 'package:messenger/providers/user_provider.dart';
 import 'package:messenger/utils/services/shared_preferences.dart';
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             DrawerHeader(
+              margin: EdgeInsets.zero,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -67,14 +69,34 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            ListTile(
-              title: const Text('Logout'),
-              leading: const Icon(Icons.logout),
-              onTap: () async {
-                await Prefs.setToken(null);
+            ListTileTheme(
+              iconColor: Theme.of(context).colorScheme.onPrimary,
+              child: Column(
+                children: [
+                  ListTile(
+                    // TODO: add profile
+                    title: const Text('Profile'),
+                    leading: const Icon(Icons.person),
+                    enabled: false,
+                  ),
+                  ListTile(
+                    // TODO: add friends
+                    title: const Text('Friends'),
+                    leading: const Icon(Icons.people),
+                    enabled: false,
+                  ),
+                  ListTile(
+                    title: const Text('Logout'),
+                    leading: const Icon(Icons.logout),
+                    onTap: () async {
+                      await Prefs.setToken(null);
 
-                Navigator.of(context).pushReplacementNamed(SplashPage.route);
-              },
+                      Navigator.of(context)
+                          .pushReplacementNamed(SplashPage.route);
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),

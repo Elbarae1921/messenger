@@ -46,6 +46,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
       await Prefs.setToken(loginOutput.jwt);
 
+      await Prefs.setAutoEmail(_emailController.text);
+
       Provider.of<UserProvider>(context, listen: false).user = loginOutput.user;
 
       Navigator.of(context).pushReplacementNamed(HomePage.route);
