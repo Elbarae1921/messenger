@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:messenger/modules/home_page.dart';
-import 'package:messenger/modules/register_page.dart';
 import 'package:messenger/providers/user_provider.dart';
 import 'package:messenger/utils/services/graphql.dart';
 import 'package:messenger/utils/services/shared_preferences.dart';
@@ -10,30 +9,36 @@ import 'package:messenger/widgets/email_text_form_field.dart';
 import 'package:messenger/widgets/password_text_form_field.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key? key}) : super(key: key);
 
-  static final route = '/login';
+  static final route = '/register';
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
 
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
+  final _firstNameFocusNode = FocusNode();
+  final _lastNameFocusNode = FocusNode();
 
   final _formKey = GlobalKey<FormState>();
 
-  Future<void> _login() async {
+  Future<void> _register() async {
     if (_formKey.currentState?.validate() != true) return;
 
     try {
-      final loginOutput = await Mutations.login(
+      final loginOutput = await Mutations.register(
         password: _passwordController.text,
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
         email: _emailController.text,
       );
 
@@ -50,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) {
           return AlertDialog(
             title: const Text('Warning'),
-            content: Text('Invalid login credentials.'),
+            content: Text('An error occurred.'),
             actions: [
               TextButton(
                 child: const Text('Close'),
@@ -65,17 +70,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _register() async {
-    Navigator.of(context).pushNamed(RegisterPage.route);
-  }
-
-  Future<void> _forgot() async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return ForgotPasswordDialog(email: _emailController.text);
-      },
-    );
+  void _back() {
+    Navigator.of(context).pop();
   }
 
   @override
@@ -108,12 +104,42 @@ class _LoginPageState extends State<LoginPage> {
                             bottom: 8,
                           ),
                           child: Text(
-                            'Login',
+                            'Register',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.headline6,
                           ),
                         ),
                         const Divider(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: TextFormField(
+                            focusNode: _firstNameFocusNode,
+                            controller: _firstNameController,
+                            decoration: const InputDecoration(
+                              labelText: 'First name',
+                              icon: const Icon(Icons.person),
+                            ),
+                            validator: (value) {
+                              if ((value ?? '').length < 2)
+                                return 'Invalid first name';
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: TextFormField(
+                            focusNode: _lastNameFocusNode,
+                            controller: _lastNameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Last name',
+                              icon: const Icon(Icons.person),
+                            ),
+                            validator: (value) {
+                              if ((value ?? '').length < 2)
+                                return 'Invalid last name';
+                            },
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: EmailTextFormField(
@@ -136,18 +162,6 @@ class _LoginPageState extends State<LoginPage> {
                             bottom: 2,
                           ),
                           child: ElevatedButton(
-                            child: const Text('Login'),
-                            onPressed: _login,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 2,
-                            left: 12,
-                            right: 12,
-                            bottom: 2,
-                          ),
-                          child: ElevatedButton(
                             child: const Text('Register'),
                             onPressed: _register,
                           ),
@@ -160,8 +174,8 @@ class _LoginPageState extends State<LoginPage> {
                             bottom: 8,
                           ),
                           child: TextButton(
-                            child: const Text('💀 Forgor'),
-                            onPressed: _forgot,
+                            child: const Text('Go back'),
+                            onPressed: _back,
                           ),
                         ),
                       ],
@@ -201,13 +215,6 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
     if (_formKey.currentState?.validate() != true) return;
 
     Navigator.of(context).pop();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _emailController.text = widget.email;
   }
 
   @override

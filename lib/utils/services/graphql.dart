@@ -2,20 +2,29 @@ import 'package:graphql/client.dart';
 import 'package:messenger/utils/env.dart';
 import 'package:messenger/models/gql.dart';
 import 'package:messenger/models/user.dart';
+import 'package:messenger/utils/services/shared_preferences.dart';
 
 enum QueryMode { mutate, query }
 
 class GqlClient {
   static final _httpLink = HttpLink(Env.API_URL);
 
-  // static final _authLink = AuthLink(
-  //   getToken: () async => 'Bearer $_accessToken',
-  // );
+  static Future<GraphQLClient> get _client async {
+    final token = await Prefs.getToken();
 
-  static GraphQLClient get _client => GraphQLClient(
+    if (token == null)
+      return GraphQLClient(
         cache: GraphQLCache(),
-        link: /* _authLink.concat( */ _httpLink /* ) */,
+        link: _httpLink,
       );
+    else
+      return GraphQLClient(
+        cache: GraphQLCache(),
+        link: AuthLink(
+          getToken: () => 'Bearer $token',
+        ).concat(_httpLink),
+      );
+  }
 
   static Future<Map<String, dynamic>> fetch({
     required String document,
@@ -23,11 +32,11 @@ class GqlClient {
     required QueryMode queryMode,
   }) async {
     final result = await (queryMode == QueryMode.query
-        ? _client.query(QueryOptions(
+        ? (await _client).query(QueryOptions(
             document: gql(document),
             variables: variables ?? {},
           ))
-        : _client.mutate(MutationOptions(
+        : (await _client).mutate(MutationOptions(
             document: gql(document),
             variables: variables ?? {},
           )));
@@ -53,7 +62,49 @@ class Queries {
       queryMode: QueryMode.query,
     );
 
-    return User.fromJson(result);
+    return User.fromJson(result['me']);
+  }
+
+  static Future<User> getPosts({
+    required int cursor,
+    required int limit,
+  }) async {
+    const String document = r'''
+    query {
+      getPosts(data: { cursor: $cursor, limit: $limit }) {
+        results {
+          id
+          content
+          image
+          isPrivate
+          user {
+            fullName
+          }
+          likers {
+            fullName
+          }
+          comments {
+            content
+          }
+          likes
+        }
+        hasMore
+      }
+    }
+    ''';
+
+    final variables = <String, dynamic>{
+      'cursor': cursor,
+      'limit': limit,
+    };
+
+    final result = await GqlClient.fetch(
+      document: document,
+      variables: variables,
+      queryMode: QueryMode.query,
+    );
+
+    return User.fromJson(result['getPosts']);
   }
 }
 
@@ -66,7 +117,7 @@ class Mutations {
   }) async {
     const String document = r'''
     mutation Register($data: RegisterInput!) {
-      login(data: $data) {
+      register(data: $data) {
         user { id, firstName, lastName, fullName, email },
         jwt
       }
@@ -88,7 +139,7 @@ class Mutations {
       queryMode: QueryMode.mutate,
     );
 
-    return LoginOutput.fromJson(result);
+    return LoginOutput.fromJson(result['register']);
   }
 
   static Future<LoginOutput> login({
@@ -117,6 +168,30 @@ class Mutations {
       queryMode: QueryMode.mutate,
     );
 
-    return LoginOutput.fromJson(result);
+    return LoginOutput.fromJson(result['login']);
+  }
+
+  static Future<LoginOutput> like({
+    required bool like,
+  }) async {
+    const document = r'''
+    mutation LikePost($data: IdInput!) {
+      like(data: $data)
+    }
+    ''';
+
+    final variables = <String, dynamic>{
+      'data': {
+        'like': like,
+      },
+    };
+
+    final result = await GqlClient.fetch(
+      document: document,
+      variables: variables,
+      queryMode: QueryMode.mutate,
+    );
+
+    return LoginOutput.fromJson(result['like']);
   }
 }

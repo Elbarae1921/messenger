@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:messenger/modules/home_page.dart';
 import 'package:messenger/modules/login_page.dart';
 import 'package:messenger/providers/user_provider.dart';
 import 'package:messenger/utils/services/graphql.dart';
@@ -25,12 +26,15 @@ class _SplashPageState extends State<SplashPage> {
       final token = await Prefs.getToken();
 
       if (token != null) {
-        final user = await Queries.me();
+        try {
+          final user = await Queries.me();
 
-        Provider.of<UserProvider>(context, listen: false).user = user;
+          Provider.of<UserProvider>(context, listen: false).user = user;
 
-        // TODO: main page
-        // Navigator.of(context).pushReplacementNamed()
+          Navigator.of(context).pushReplacementNamed(HomePage.route);
+        } catch (e) {
+          Navigator.of(context).pushReplacementNamed(LoginPage.route);
+        }
       } else
         Navigator.of(context).pushReplacementNamed(LoginPage.route);
     });

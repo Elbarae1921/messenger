@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:messenger/constants/extended_colors.dart';
+import 'package:messenger/modules/home_page.dart';
 import 'package:messenger/modules/login_page.dart';
+import 'package:messenger/modules/register_page.dart';
 import 'package:messenger/modules/splash_page.dart';
 import 'package:messenger/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +32,8 @@ class App extends StatelessWidget {
         routes: {
           SplashPage.route: (context) => SplashPage(),
           LoginPage.route: (context) => LoginPage(),
+          RegisterPage.route: (context) => RegisterPage(),
+          HomePage.route: (context) => HomePage(),
         },
       ),
     );
