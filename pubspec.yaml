@@ -21,6 +21,7 @@ dependencies:
   package_info_plus: ^1.0.3
   platform_device_id: ^1.0.1
   crypto: ^3.0.1
+  graphql: ^5.0.0
 
 dev_dependencies:
   flutter_test:

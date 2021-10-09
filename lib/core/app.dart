@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messenger/constants/extended_colors.dart';
-import 'package:messenger/modules/home.dart';
+import 'package:messenger/modules/login_page.dart';
+import 'package:messenger/modules/splash_page.dart';
 
 class App extends StatelessWidget {
   @override
@@ -11,14 +12,21 @@ class App extends StatelessWidget {
       accentTextTheme: textTheme,
       primaryTextTheme: textTheme,
       primaryColor: ExtendedColors.spaceCadet,
+      colorScheme: ColorScheme.fromSwatch(
+        accentColor: ExtendedColors.darkSlateGray,
+        primarySwatch: ExtendedColors.spaceCadet,
+      ),
     );
 
     return MaterialApp(
       theme: appTheme,
       title: 'Messenger',
-      home: HomeScreen(),
       darkTheme: appTheme,
       debugShowCheckedModeBanner: false,
+      routes: {
+        SplashPage.route: (context) => SplashPage(),
+        LoginPage.route: (context) => LoginPage(),
+      },
     );
   }
 }
