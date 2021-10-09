@@ -22,6 +22,7 @@ dependencies:
   platform_device_id: ^1.0.1
   crypto: ^3.0.1
   graphql: ^5.0.0
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +44,7 @@ flutter:
 
   assets:
     - assets/images/default.png
+    - .env
 
   fonts:
     - family: Poppins

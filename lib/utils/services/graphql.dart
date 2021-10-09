@@ -1,13 +1,12 @@
 import 'package:graphql/client.dart';
+import 'package:messenger/env.dart';
 import 'package:messenger/models/gql.dart';
 import 'package:messenger/models/user.dart';
 
 enum QueryMode { mutate, query }
 
 class GqlClient {
-  static final _httpLink = HttpLink(
-    '',
-  );
+  static final _httpLink = HttpLink(Env.API_URL);
 
   // static final _authLink = AuthLink(
   //   getToken: () async => 'Bearer $_accessToken',
