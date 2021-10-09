@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:messenger/modules/login_page.dart';
+import 'package:messenger/providers/user_provider.dart';
 import 'package:messenger/utils/services/graphql.dart';
 import 'package:messenger/utils/services/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
   SplashPage({Key? key}) : super(key: key);
@@ -23,9 +25,12 @@ class _SplashPageState extends State<SplashPage> {
       final token = await Prefs.getToken();
 
       if (token != null) {
-        final k = await Queries.me();
+        final user = await Queries.me();
 
-        "".toString();
+        Provider.of<UserProvider>(context, listen: false).user = user;
+
+        // TODO: main page
+        // Navigator.of(context).pushReplacementNamed()
       } else
         Navigator.of(context).pushReplacementNamed(LoginPage.route);
     });

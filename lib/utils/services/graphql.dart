@@ -1,5 +1,5 @@
 import 'package:graphql/client.dart';
-import 'package:messenger/env.dart';
+import 'package:messenger/utils/env.dart';
 import 'package:messenger/models/gql.dart';
 import 'package:messenger/models/user.dart';
 

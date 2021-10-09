@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:messenger/constants/extended_colors.dart';
 import 'package:messenger/modules/login_page.dart';
 import 'package:messenger/modules/splash_page.dart';
+import 'package:messenger/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
   @override
@@ -18,15 +20,18 @@ class App extends StatelessWidget {
       ),
     );
 
-    return MaterialApp(
-      theme: appTheme,
-      title: 'Messenger',
-      darkTheme: appTheme,
-      debugShowCheckedModeBanner: false,
-      routes: {
-        SplashPage.route: (context) => SplashPage(),
-        LoginPage.route: (context) => LoginPage(),
-      },
+    return ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: MaterialApp(
+        theme: appTheme,
+        title: 'Messenger',
+        darkTheme: appTheme,
+        debugShowCheckedModeBanner: false,
+        routes: {
+          SplashPage.route: (context) => SplashPage(),
+          LoginPage.route: (context) => LoginPage(),
+        },
+      ),
     );
   }
 }
