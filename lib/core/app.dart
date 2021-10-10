@@ -16,10 +16,35 @@ class App extends StatelessWidget {
       accentTextTheme: textTheme,
       primaryTextTheme: textTheme,
       primaryColor: ExtendedColors.spaceCadet,
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: ExtendedColors.darkSlateGray,
+      ),
       colorScheme: ColorScheme.fromSwatch(
         accentColor: ExtendedColors.darkSlateGray,
         primarySwatch: ExtendedColors.spaceCadet,
       ),
+      textButtonTheme: TextButtonThemeData(style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (states.any({
+            MaterialState.dragged,
+            MaterialState.focused,
+            MaterialState.hovered,
+            MaterialState.pressed,
+            MaterialState.selected,
+          }.contains)) return ExtendedColors.darkSlateGray.shade100;
+          return ThemeData.dark().disabledColor;
+        }),
+      )),
+      switchTheme: SwitchThemeData(
+          thumbColor: MaterialStateProperty.resolveWith((states) {
+        if (states.any({
+          MaterialState.dragged,
+          MaterialState.focused,
+          MaterialState.hovered,
+          MaterialState.pressed,
+          MaterialState.selected,
+        }.contains)) return ExtendedColors.darkSlateGray;
+      })),
     );
 
     return ChangeNotifierProvider(

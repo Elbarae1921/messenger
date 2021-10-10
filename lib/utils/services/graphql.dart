@@ -1,4 +1,6 @@
+import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
+import 'package:messenger/models/post.dart';
 import 'package:messenger/utils/env.dart';
 import 'package:messenger/models/gql.dart';
 import 'package:messenger/models/user.dart';
@@ -33,11 +35,11 @@ class GqlClient {
   }) async {
     final result = await (queryMode == QueryMode.query
         ? (await _client).query(QueryOptions(
-            document: gql(document),
+            document: parseString(document),
             variables: variables ?? {},
           ))
         : (await _client).mutate(MutationOptions(
-            document: gql(document),
+            document: parseString(document),
             variables: variables ?? {},
           )));
 
@@ -53,7 +55,13 @@ class Queries {
   static Future<User> me() async {
     const String document = r'''
     query {
-      me { id, firstName, lastName, fullName, email }
+      me {
+        id
+        firstName
+        lastName
+        fullName
+        email
+      }
     }
     ''';
 
@@ -65,13 +73,13 @@ class Queries {
     return User.fromJson(result['me']);
   }
 
-  static Future<User> getPosts({
-    required int cursor,
+  static Future<GetPostsOutput> getPosts({
+    int? cursor,
     required int limit,
   }) async {
     const String document = r'''
-    query {
-      getPosts(data: { cursor: $cursor, limit: $limit }) {
+    query GetPosts($data: PaginationInput!) {
+      getPosts(data: $data) {
         results {
           id
           content
@@ -94,8 +102,10 @@ class Queries {
     ''';
 
     final variables = <String, dynamic>{
-      'cursor': cursor,
-      'limit': limit,
+      'data': {
+        'cursor': cursor,
+        'limit': limit,
+      },
     };
 
     final result = await GqlClient.fetch(
@@ -104,7 +114,7 @@ class Queries {
       queryMode: QueryMode.query,
     );
 
-    return User.fromJson(result['getPosts']);
+    return GetPostsOutput.fromJson(result['getPosts']);
   }
 }
 
@@ -118,7 +128,13 @@ class Mutations {
     const String document = r'''
     mutation Register($data: RegisterInput!) {
       register(data: $data) {
-        user { id, firstName, lastName, fullName, email },
+        user {
+          id
+          firstName
+          lastName
+          fullName
+          email
+        }
         jwt
       }
     }
@@ -149,7 +165,13 @@ class Mutations {
     const document = r'''
     mutation Login($data: LoginInput!) {
       login(data: $data) {
-        user { id, firstName, lastName, fullName, email },
+        user {
+          id
+          firstName
+          lastName
+          fullName
+          email
+        }
         jwt
       }
     }
@@ -171,18 +193,18 @@ class Mutations {
     return LoginOutput.fromJson(result['login']);
   }
 
-  static Future<LoginOutput> like({
-    required bool like,
+  static Future<bool> like({
+    required int id,
   }) async {
     const document = r'''
-    mutation LikePost($data: IdInput!) {
+    mutation Like($data: IdInput!) {
       like(data: $data)
     }
     ''';
 
     final variables = <String, dynamic>{
       'data': {
-        'like': like,
+        'id': id,
       },
     };
 
@@ -192,6 +214,41 @@ class Mutations {
       queryMode: QueryMode.mutate,
     );
 
-    return LoginOutput.fromJson(result['like']);
+    return result['like'];
+  }
+
+  static Future<Post> createPost({
+    required String content,
+    required bool isPrivate,
+  }) async {
+    const document = r'''
+    mutation CreatePost($data: CreatePostInput!) {
+      createPost(data: $data) {
+        id
+        content
+        image
+        isPrivate
+        user
+        likers
+        comments
+        likes
+      }
+    }
+    ''';
+
+    final variables = <String, dynamic>{
+      'data': {
+        'content': content,
+        'isPrivate': isPrivate,
+      },
+    };
+
+    final result = await GqlClient.fetch(
+      document: document,
+      variables: variables,
+      queryMode: QueryMode.mutate,
+    );
+
+    return Post.fromJson(result['createPost']);
   }
 }

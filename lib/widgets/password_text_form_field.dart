@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:messenger/widgets/text_form_field_theme.dart';
 
 class PasswordTextFormField extends StatefulWidget {
   const PasswordTextFormField({
@@ -25,22 +26,24 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      obscureText: !_visible,
-      focusNode: widget.focusNode,
-      controller: widget.textEditingController,
-      keyboardType: _visible ? TextInputType.visiblePassword : null,
-      decoration: InputDecoration(
-        labelText: 'Password',
-        icon: const Icon(Icons.lock),
-        suffixIcon: IconButton(
-          onPressed: _toggleVisible,
-          icon: Icon(_visible ? Icons.visibility_off : Icons.visibility),
+    return TextFormFieldTheme(
+      child: TextFormField(
+        obscureText: !_visible,
+        focusNode: widget.focusNode,
+        controller: widget.textEditingController,
+        keyboardType: _visible ? TextInputType.visiblePassword : null,
+        decoration: InputDecoration(
+          labelText: 'Password',
+          icon: const Icon(Icons.lock),
+          suffixIcon: IconButton(
+            onPressed: _toggleVisible,
+            icon: Icon(_visible ? Icons.visibility_off : Icons.visibility),
+          ),
         ),
+        validator: (value) {
+          if ((value ?? '').length < 4) return 'Invalid password';
+        },
       ),
-      validator: (value) {
-        if ((value ?? '').length < 4) return 'Invalid password';
-      },
     );
   }
 }
