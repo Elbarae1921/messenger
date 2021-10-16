@@ -25,7 +25,7 @@ GetPostsOutput _$GetPostsOutputFromJson(Map<String, dynamic> json) {
         .map((e) => Post.fromJson(e as Map<String, dynamic>))
         .toList(),
     hasMore: json['hasMore'] as bool,
-    lastId: json['lastId'] as int,
+    lastId: json['lastId'] as int?,
   );
 }
 

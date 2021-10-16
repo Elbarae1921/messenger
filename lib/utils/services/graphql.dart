@@ -86,10 +86,14 @@ class Queries {
           image
           isPrivate
           user {
+            id
+            firstName
+            lastName
             fullName
+            email
           }
           likers {
-            fullName
+            firstName
           }
           comments {
             content
@@ -228,9 +232,19 @@ class Mutations {
         content
         image
         isPrivate
-        user
-        likers
-        comments
+        user {
+          id
+          firstName
+          lastName
+          fullName
+          email
+        }
+        likers {
+          firstName
+        }
+        comments {
+          content
+        }
         likes
       }
     }

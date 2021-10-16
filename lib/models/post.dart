@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:messenger/models/user.dart';
 
 part 'post.g.dart';
 
@@ -8,7 +9,7 @@ class Post {
   final String content;
   final String? image;
   final bool isPrivate;
-  final dynamic user;
+  final User user;
   final List<dynamic> likers;
   final List<dynamic> comments;
   final int likes;

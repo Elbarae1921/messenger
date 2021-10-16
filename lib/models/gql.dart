@@ -24,7 +24,7 @@ class LoginOutput {
 class GetPostsOutput {
   final List<Post> results;
   final bool hasMore;
-  final int lastId;
+  final int? lastId;
 
   GetPostsOutput({
     required this.results,
