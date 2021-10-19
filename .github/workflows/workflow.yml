@@ -50,8 +50,12 @@ jobs:
         with:
           name: web
 
-      - name: List content
-        run: ls -la
+      
+      - name: Zip build files
+        uses: papeloto/action-zip@v1
+        with:
+          files: ./*
+          dest: web.zip
 
       - name: Upload build files to S3
         uses: shallwefootball/s3-upload-action@master
