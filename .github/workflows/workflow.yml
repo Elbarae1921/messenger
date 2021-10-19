@@ -12,10 +12,12 @@ jobs:
       - uses: actions/checkout@v1
         with:
           fetch-depth: 0
+
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
           java-version: "12.x"
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
@@ -27,7 +29,28 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
+      - name: Build Web
+        run: flutter build web --release
+
       - name: Create Github Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/*.apk"
+          artifacts: "build/app/outputs/apk/release/*.apk,build/web"
+  deploy:
+    name: Deploy Web
+    runs-on: ubuntu-latest
+    steps:
+      - name: Zip build files
+        uses: papeloto/action-zip@v1
+        with:
+          files: build/web/*
+          dest: web.zip
+
+      - name: Upload build files to S3
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: ${{ secrets.AWS_BUCKET }}
+          source_dir: 'web.zip'
+          destination_dir: ''
