@@ -56,6 +56,8 @@ jobs:
         with:
           args: zip -r web.zip ./
 
+      - run: ls -la
+
       - name: Upload build files to S3
         uses: shallwefootball/s3-upload-action@master
         with:
