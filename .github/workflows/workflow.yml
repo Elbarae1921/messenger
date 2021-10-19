@@ -32,20 +32,23 @@ jobs:
       - name: Build Web
         run: flutter build web --release
 
+        uses: actions/upload-artifact@v2
+        with:
+          name: web
+          path: build/web/*
+
       - name: Create Github Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/*.apk,build/web"
+          artifacts: "build/app/outputs/apk/release/*.apk"
   deploy:
     needs: [build]
     name: Deploy Web
     runs-on: ubuntu-latest
     steps:
-      - name: Zip build files
-        uses: papeloto/action-zip@v1
+      - uses: actions/download-artifact@v2
         with:
-          files: build/web/*
-          dest: web.zip
+          name: web
 
       - name: Upload build files to S3
         uses: shallwefootball/s3-upload-action@master
