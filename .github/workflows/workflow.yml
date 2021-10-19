@@ -52,11 +52,9 @@ jobs:
 
       
       - name: Zip build files
-        uses: papeloto/action-zip@v1
+        uses: montudor/action-zip@v1
         with:
-          files: ./
-          recursive: true
-          dest: web.zip
+          args: zip -r web.zip ./
 
       - name: Upload build files to S3
         uses: shallwefootball/s3-upload-action@master
