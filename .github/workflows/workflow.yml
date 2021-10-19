@@ -3,7 +3,7 @@ name: CD
 on:
   push:
     tags:
-      - "v*.*" # on every version tag will build a new android artifact.
+      - "v**.**.**" # on every version tag will build a new android artifact.
 jobs:
   build:
     name: Build APK
