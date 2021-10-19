@@ -37,6 +37,7 @@ jobs:
         with:
           artifacts: "build/app/outputs/apk/release/*.apk,build/web"
   deploy:
+    needs: [build]
     name: Deploy Web
     runs-on: ubuntu-latest
     steps:
