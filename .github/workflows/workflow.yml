@@ -54,7 +54,7 @@ jobs:
       - name: Zip build files
         uses: papeloto/action-zip@v1
         with:
-          files: ./*
+          files: ./
           recursive: true
           dest: web.zip
 
