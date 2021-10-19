@@ -32,7 +32,7 @@ jobs:
       - name: Build Web
         run: flutter build web --release
 
-        uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         with:
           name: web
           path: build/web/*
